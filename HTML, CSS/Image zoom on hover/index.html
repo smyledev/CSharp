@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<style>
+   .scale {
+    display: inline-block; 
+    overflow: hidden; 
+   }
+   .scale img {
+    transition: 0.8s; /* Effect time */
+    display: block; 
+   }
+   .scale img:hover {
+    transform: scale(1.1); /* Zoom in */
+   }
+  </style>
+
+<body>
+	<a class="image featured" href="#">
+		<div class="scale"><img class="article" src="image.jpg" class="scale" width="50%;"></div>
+	</a>
+</body>
+</html>
