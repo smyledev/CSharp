@@ -1,0 +1,254 @@
+﻿@{
+    ViewData["Title"] = "Проверка подписи";
+}
+
+<style>
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+        -webkit-text-fill-color: white;
+        -webkit-box-shadow: 0 0 0px 1000px #13141438 inset;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    a.nav-link.checkSignature {
+        color: #63e853;
+    }
+
+    h5 {
+        color: #419936;
+    }
+
+    .isDisabled {
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+    }
+</style>
+
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+
+<form method="post" asp-controller="GetMessage" asp-action="GetAccessToEmailForReceive" name="getMailFormAccess">
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <h5 сlass="action-link" id="getAccess">1. Получить доступ к почтовому ящику</h5>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <label class="col-sm-3 col-form-label" style="color: #ffffffbf;">Адрес gmail: </label>
+        <div class="col-sm-7">
+            <input name="receiverEmail" rows="6" cols="33" type="email" class="form-control" style="color: white; background: #45a23a85;" value="@ViewBag.ReceiverEmail" />
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <label class="col-sm-3 col-form-label" style="color: #ffffffbf;">Пароль приложения для доступа к почте: </label>
+        <div class="col-sm-7">
+            <input name="applicationPassword" rows="6" cols="33" type="password" class="form-control" style="color: white; background: #45a23a85;" value="@ViewBag.ApplicationPassword" />
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    <br /><br />
+
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-2">
+            <button type="submit" class="btn btn-outline-success checkAccess">Проверить</button>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+</form>
+
+<br />
+<br />
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-10">
+        <h5 class="isDisabled" id="getMessage">2. Прочитать сообщение</h5>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+
+<br />
+
+@{
+    if (@ViewBag.StatusAccess == "accessAllowed")
+    {
+        <form method="post" asp-controller="GetMessage" asp-action="CheckSignature" name="checkSignature">
+            <p>
+                <br />
+
+                <div class="form-group row">
+                    <div class="col-sm-1"></div>
+                    <label class="col-sm-3 col-form-label" style="color: #ffffffbf;">Тема сообщения</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" style="color: white; background: #45a23a57;" type="text" name="subject" value="@ViewBag.Subject" />
+                    </div>
+                    <div class="col-sm-1"></div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-1"></div>
+                    <label class="col-sm-3 col-form-label" style="color: #ffffffbf;">Отправитель</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" style="color: white; background: #45a23a57;" type="email" name="email" value="@ViewBag.Email" />
+                    </div>
+                    <div class="col-sm-1"></div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-1"></div>
+                    <label class="col-sm-3 col-form-label" style="color: #ffffffbf;">Дата</label>
+                    <div class="col-sm-7">
+                        <input class="form-control" style="color: white; background: #45a23a57;" type="date" name="date" value="@ViewBag.Date" />
+                    </div>
+                    <div class="col-sm-1"></div>
+                </div>
+
+                <br />
+
+                <div class="form-group row">
+                    <div class="col-sm-1"></div>
+                    <label class="col-sm-3 col-form-label" style="color: #ffffffbf;">Текст сообщения</label>
+                    <div class="col-sm-7">
+                        <textarea name="textMessage" style="color: white; background: #45a23a57;" rows="6" cols="33" type="text" class="form-control">@ViewBag.Message</textarea>
+                    </div>
+                    <div class="col-sm-1"></div>
+                </div>
+
+                <br />
+
+                <input name="applicationPassword" hidden value="@ViewBag.ApplicationPassword" />
+                <input name="receiverEmail" hidden value="@ViewBag.ReceiverEmail" />
+
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-outline-success">Проверить ЭЦП</button>
+                    </div>
+                    <div class="col-sm-4"></div>
+                </div>
+
+                <br /><br />
+
+                <div class="row">
+                    <div class="col-sm-6"></div>
+
+                    <div class="col-sm-1">
+                        <a class="btn btn-outline-success" asp-area="" asp-controller="GetMessage" asp-action="GetMessagePage"
+                           asp-route-receiverEmail="@ViewBag.ReceiverEmail" asp-route-statusOfAccess="accessAllowed" asp-route-applicationPassword="@ViewBag.ApplicationPassword" asp-route-statusOfChangingMessage="prev">&lArr;</a>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <a class="btn btn-outline-success" asp-area="" asp-controller="GetMessage" asp-action="GetMessagePage"
+                           asp-route-receiverEmail="@ViewBag.ReceiverEmail" asp-route-statusOfAccess="accessAllowed" asp-route-applicationPassword="@ViewBag.ApplicationPassword" asp-route-statusOfChangingMessage="next">&rArr;</a>
+                    </div>
+
+                    <div class="col-sm-4"></div>
+                </div>
+
+                @if (ViewBag.StatusOfCheckSignature != "success" && ViewBag.StatusOfChangingMessage != "prev" && ViewBag.StatusOfChangingMessage != "next")
+                {
+                    <script type="text/javascript">
+                        $.get(this.href, function () {
+                            $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Сообщение</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Статус:</dt> <dd>Доступ разрешен</dd> </dl> </div> </div>');
+                            $('#modDialog').modal('show');
+                        });
+                    </script>
+                }
+
+                @ViewBag.StatusOfChangingMessage = "";
+
+                <script type="text/javascript">
+                    getAccess = document.getElementById("getAccess");
+                    getAccess.classList.add('isDisabled');
+
+                    getMessage = document.getElementById("getMessage");
+                    getMessage.classList.remove('isDisabled');
+                </script>
+            </p>
+        </form>
+    }
+
+    else if (@ViewBag.StatusAccess == "accessDenied")
+    {
+        <script type="text/javascript">
+            $.get(this.href, function () {
+                $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Сообщение</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Результат:</dt> <dd>Сооединение с почтовым сервером не установлено. Проверьте правильность введенных данных.</dd> </dl> </div> </div>');
+                $('#modDialog').modal('show');
+            });
+        </script>
+    }
+
+    if (@ViewBag.StatusOfCheckSignature == "success")
+    {
+        <script type="text/javascript">
+            $.get(this.href, function () {
+                $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Сообщение</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Статус:</dt> <dd>ЭЦП отправителя верная</dd> </dl> </div> </div>');
+                $('#modDialog').modal('show');
+            });
+        </script>
+    }
+
+    else if (@ViewBag.StatusOfCheckSignature == "error")
+    {
+        <script type="text/javascript">
+            $.get(this.href, function () {
+                $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Сообщение</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Статус:</dt> <dd>ЭЦП отправителя не верная</dd> </dl> </div> </div>');
+                $('#modDialog').modal('show');
+            });
+        </script>
+    }
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".checkAccess").click(function (e) {
+                let getMailFormAccess = document.forms.getMailFormAccess;
+
+                let receiverEmail = getMailFormAccess.elements.receiverEmail.value;
+                let applicationPassword = getMailFormAccess.elements.applicationPassword.value;
+
+                if (receiverEmail == "") {
+                    e.preventDefault();
+                    $.get(this.href, function () {
+                        $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Ошибка</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Ошибка:</dt> <dd>Почтовый адрес не указан</dd> </dl> </div> </div>');
+                        $('#modDialog').modal('show');
+                    });
+                }
+                else if (applicationPassword == "") {
+                    e.preventDefault();
+                    $.get(this.href, function () {
+                        $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Ошибка</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Ошибка:</dt> <dd>Пароль приложения пустой</dd> </dl> </div> </div>');
+                        $('#modDialog').modal('show');
+                    });
+                }
+            });
+        })
+    </script>
+}

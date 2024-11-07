@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/js/jquery-3.6.0.js"></script>
+</head>
+
+<style>
+    body {
+        background-color: #001004;
+        background-image: linear-gradient(180deg,rgba(0,0,0,0.8),rgba(0,0,0,0.8)),url('/images/theme_image.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+    }
+
+    a.navbar-brand {
+        color: #ffffff;
+    }
+
+    a.nav-link {
+        color: #ffffff;
+    }
+
+    a.navbar-brand:focus, a.navbar-brand:hover {
+        color: #63e853;
+    }
+
+    a.nav-link:hover, a.nav-link:focus {
+        color: #63e853;
+    }
+</style>
+
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm box-shadow mb-3 p-3" style="background-color:#010000; opacity: 0.7;">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="HomePage">Главная</a>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link createKeysAndSignature" asp-area="" asp-controller="CreateSignature" asp-action="CreateSignaturePage">Создание ключей и подписи</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sendSignature" asp-area="" asp-controller="SendMessage" asp-action="SendMessagePage">Отправка на почту подписи</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link checkSignature" asp-area="" asp-controller="GetMessage" asp-action="GetMessagePage">Проверка подписи</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer text-muted" style="background-color:#010000; opacity: 0.4;">
+        <div class="container" style="color: #ffffff;">
+            Разработчик: Самойлов
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+
+</html>
+

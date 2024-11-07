@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewData["Title"] = "Создание подписи";
+}
+
+<style>
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    select:-webkit-autofill,
+    select:-webkit-autofill:hover,
+    select:-webkit-autofill:focus {
+        -webkit-text-fill-color: white;
+        -webkit-box-shadow: 0 0 0px 1000px #13141438 inset;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    a.nav-link.createKeysAndSignature {
+        color: #63e853;
+    }
+
+    a.action-link {
+        color: #419936;
+    }
+
+    .action-link {
+        color: #419936;
+    }
+
+    .isDisabled {
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+    }
+</style>
+
+
+<div id="modDialog" class="modal fade">
+    <div id="dialogContent" class="modal-dialog"></div>
+</div>
+
+<p>
+    <br />
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <h5> <a class="action-link" id="createKeys" asp-controller="CreateSignature" asp-action="CreateKeys">1. Создать ключи</a> </h5>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    <br /><br />
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <h5 class="action-link isDisabled" id="createSignature">2. Создать ЭЦП</h5>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+    <br /><br />
+</p>
+
+@{
+    if (@ViewBag.ActionType == "keysAreCreated")
+    {
+        <form method="post" asp-controller="CreateSignature" asp-action="CreateSignatureForm">
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
+                    <h5 style="color: #ffffffbf;">Введите текст для создания ЭЦП</h5>
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <label class="col-sm-1 col-form-label" style="color: #ffffffbf;">Текст</label>
+                <div class="col-sm-9">
+                    <input name="text" rows="6" cols="33" type="text" class="form-control" style="color: white; background: #45a23a85;" value="@ViewBag.Text" />
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+
+            <br /> <br />
+
+            <div class="row">
+                <div class="col-sm-5"></div>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-outline-success">Создать ЭЦП</button>
+                </div>
+                <div class="col-sm-5"></div>
+            </div>
+        </form>
+
+        <script type="text/javascript">
+            $.get(this.href, function () {
+                $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Сообщение</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Статус:</dt> <dd>Ключи были созданы</dd> </dl> </div> </div>');
+                $('#modDialog').modal('show');
+            });
+
+            createKeys = document.getElementById("createKeys");
+            createKeys.classList.add('isDisabled');
+
+            createSignature = document.getElementById("createSignature");
+            createSignature.classList.remove('isDisabled');
+        </script>
+    }
+
+    else if (@ViewBag.ActionType == "signatureIsCreated")
+    {
+        <script type="text/javascript">
+            $.get(this.href, function () {
+                $('#dialogContent').html('<div class="modal-content"> <div class="modal-header"><h4>Сообщение</h4><button class="close" data-dismiss="modal" area-hidden="true">x</button></div><div class="modal-body"> <dl class="dl-horizontal"> <dt>Статус:</dt> <dd>ЭЦП была создана</dd> </dl> </div> </div>');
+                $('#modDialog').modal('show');
+            });
+
+            createSignature = document.getElementById("createSignature");
+            createSignature.classList.add('isDisabled');
+        </script>
+    }
+}
