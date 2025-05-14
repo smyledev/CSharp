@@ -1,62 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProductsAPI.Controllers
 {
+    
+
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        private readonly ILogger<ProductsController> _logger;
+        private readonly ProductsService _productsService;
+
+        public ProductsController(ILogger<ProductsController> logger, ProductsService productsService)
+        {
+            _logger = logger;
+            _productsService = productsService;
+        }
 
         [HttpGet("GetAllProducts")]
         public List<Product> GetAllProducts()
         {
-            List<Product> Products = new List<Product>();
-            Products.Add(new Product(1, "CF", "chicken", 150));
-            Products.Add(new Product(2, "CF", "potato", 50));
-            return Products;
+            return _productsService.GetAllProducts();
         }
 
         [HttpGet("GetProductById/{id}")]
-        public Product GetProductById(int id)
+        public Product? GetProductById(int id)
         {
-            List<Product> Products = new List<Product>();
-            Products.Add(new Product(1, "CF", "chicken", 150));
-            Products.Add(new Product(2, "CF", "potato", 50));
-            return Products.Find(item => item.id == id);
+            return _productsService.GetProductById(id);
         }
 
         [HttpPost("CreateProduct")]
-        public void CreateProduct([FromBody]int price)
+        public void CreateProduct(string name, int price)
         {
-            Product NewProduct = new Product(1, "CF", "potato", price);
+            _productsService.CreateProduct(name, price);
         }
 
         [HttpPut("UpdateProduct/{id}")]
         public void UpdateProduct(int id, [FromBody]int price)
         {
-            List<Product> Products = new List<Product>();
-            Products.Add(new Product(1, "CF", "chicken", 150));
-            Products.Add(new Product(2, "CF", "potato", 50));
-
-            var existing = Products.FirstOrDefault(x => x.id == id);
-            if (existing == null)
-                return;
-
-            existing.price = price;
+            _productsService.UpdateProduct(id, price);
         }
 
         [HttpDelete("DeleteProductById/{id}")]
         public void DeleteProductById(int id)
         {
-            List<Product> Products = new List<Product>();
-            Products.Add(new Product(1, "CF", "chicken", 150));
-            Products.Add(new Product(2, "CF", "potato", 50));
-
-            var existing = Products.FirstOrDefault(x => x.id == id);
-            if (existing == null)
-                return;
-
-            Products.Remove(existing);
+            _productsService.DeleteProductById(id);
         }
     }
 }

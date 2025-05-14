@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/Products": {
+    "/api/Products/GetAllProducts": {
       "get": {
         "tags": [
           "Products"
@@ -41,41 +41,9 @@
             }
           }
         }
-      },
-      "post": {
-        "tags": [
-          "Products"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
       }
     },
-    "/api/Products/{id}": {
+    "/api/Products/GetProductById/{id}": {
       "get": {
         "tags": [
           "Products"
@@ -113,7 +81,38 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/Products/CreateProduct": {
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Products/UpdateProduct/{id}": {
       "put": {
         "tags": [
           "Products"
@@ -156,7 +155,9 @@
             "description": "OK"
           }
         }
-      },
+      }
+    },
+    "/api/Products/DeleteProductById/{id}": {
       "delete": {
         "tags": [
           "Products"
